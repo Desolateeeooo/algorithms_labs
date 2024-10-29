@@ -46,6 +46,7 @@
 				Так как данные хранятся в виде строки, используем JSON.parse() для преобразования строки в массив. 
 				Если массив пуст, задаем пустой массив [].
 				*/
+
         let employees = JSON.parse(localStorage.getItem(storageKey)) || [];
         employees.push(employee);
 				
@@ -53,6 +54,7 @@
 				Сохраняем обновленный массив сотрудников в localStorage с помощью localStorage.setItem(). 
 				Данные сохраняются в виде строки, поэтому используем JSON.stringify().
 				*/
+
         localStorage.setItem(storageKey, JSON.stringify(employees));
         document.getElementById('result').innerText = 'Сотрудник добавлен!';
     }
