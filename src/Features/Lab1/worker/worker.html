@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление Работниками</title>
+</head>
+<body>
+
+<h2>Управление Работниками</h2>
+
+<label for="name">ФИО:</label><br>
+<input type="text" id="name"><br><br>
+
+<label for="position">Должность:</label><br>
+<input type="text" id="position"><br><br>
+
+<label for="education">Образование:</label><br>
+<input type="text" id="education"><br><br>
+
+<label for="experience">Стаж работы (лет):</label><br>
+<input type="number" id="experience"><br><br>
+
+<button onclick="addEmployee()">Добавить сотрудника</button>
+<button onclick="removeEmployee()">Удалить сотрудника</button>
+<button onclick="checkEmployee()">Проверить наличие сотрудника</button>
+<button onclick="displayEmployees()">Показать всех сотрудников</button>
+
+<h3>Результат:</h3>
+<pre id="result"></pre>
+
+<script>
+    const storageKey = 'employees'; // Ключ хранения данных о сотрудниках в localStorage
+
+    // Добавить сотрудника
+    function addEmployee() {
+        const name = document.getElementById('name').value;
+        const position = document.getElementById('position').value;
+        const education = document.getElementById('education').value;
+        const experience = parseInt(document.getElementById('experience').value, 10);
+
+        const employee = { name, position, education, experience };
+
+				/*
+				Получаем существующих сотрудников из localStorage с помощью localStorage.getItem(). 
+				Так как данные хранятся в виде строки, используем JSON.parse() для преобразования строки в массив. 
+				Если массив пуст, задаем пустой массив [].
+				*/
+        let employees = JSON.parse(localStorage.getItem(storageKey)) || [];
+        employees.push(employee);
+				
+				/*
+				Сохраняем обновленный массив сотрудников в localStorage с помощью localStorage.setItem(). 
+				Данные сохраняются в виде строки, поэтому используем JSON.stringify().
+				*/
+        localStorage.setItem(storageKey, JSON.stringify(employees));
+        document.getElementById('result').innerText = 'Сотрудник добавлен!';
+    }
+
+    // Удалить сотрудника
+    function removeEmployee() {
+        const name = document.getElementById('name').value;
+
+        let employees = JSON.parse(localStorage.getItem(storageKey)) || [];
+        employees = employees.filter(employee => employee.name !== name);
+        localStorage.setItem(storageKey, JSON.stringify(employees));
+        document.getElementById('result').innerText = 'Сотрудник удален!';
+    }
+
+    // Проверить наличие сотрудника
+    function checkEmployee() {
+        const name = document.getElementById('name').value;
+
+        const employees = JSON.parse(localStorage.getItem(storageKey)) || [];
+        const exists = employees.some(employee => employee.name === name);
+
+        if (exists) {
+            document.getElementById('result').innerText = 'Сотрудник найден в файле!';
+        } else {
+            document.getElementById('result').innerText = 'Сотрудник не найден!';
+        }
+    }
+
+    // Показать всех сотрудников
+    function displayEmployees() {
+        const employees = JSON.parse(localStorage.getItem(storageKey)) || [];
+        if (employees.length === 0) {
+            document.getElementById('result').innerText = 'Нет сотрудников.';
+        } else {
+            document.getElementById('result').innerText = JSON.stringify(employees, null, 2);
+        }
+    }
+</script>
+
+</body>
+</html>
